@@ -3,9 +3,9 @@ package com.gini.domain.entities;
 import com.gini.domain.enums.Constructor;
 import com.gini.domain.enums.Manufacturer;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -18,6 +18,13 @@ import java.util.UUID;
 @Entity
 public class Part {
 
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "id", updatable = false, nullable = false, unique = true)
     private UUID id;
     private String partName;
     private String partNumber;
