@@ -4,7 +4,7 @@ import com.gini.domain.enums.Constructor;
 import com.gini.domain.enums.Manufacturer;
 import lombok.*;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Objects;
@@ -23,12 +23,26 @@ public class Part {
     private String partNumber;
     private OffsetDateTime created;
     private OffsetDateTime updated;
+
+    @OneToOne
     private Price price;
+
+    @ManyToMany
     private Suplayer suplayer;
+
+    @ManyToMany
     private CarModel carModel;
+
+    @Enumerated(EnumType.STRING)
     private Constructor constructor;
+
+    @OneToOne
     private PartSpecifications partSpecifications;
+
+    @OneToMany(mappedBy = "part")
     private Comment comment;
+
+    @Enumerated(EnumType.STRING)
     private Manufacturer manufacturer;
 
 

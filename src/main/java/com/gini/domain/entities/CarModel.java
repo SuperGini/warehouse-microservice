@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -19,4 +20,7 @@ public class CarModel {
 
     private LocalDate year;
     private String engineType;
+
+    @ManyToMany
+    private Part part;
 }
