@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: inventory-parts
+
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:inventory}
+    username: ${DB_USER:ginitoru}
+    password: ${DB_PASSWORD:Argon7856321!@#&*GFFD!}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 0
+      connection-timeout: 30000
+      max-lifetime: 900000
+      transaction-isolation: TRANSACTION_READ_COMMITTED
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 500
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: false
+        useLocalSessionState: true
+        rewriteBatchedStatements: true
+        cacheResultSetMetadata: true
+        cacheServerConfiguration: true
+        elideSetAutoCommits: true
+        maintainTimeStats: false
+
+
+  jpa:
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+
+server:
+  port: 8080
+
+logging:
+  level:
+    net.
+
+

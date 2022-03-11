@@ -1,0 +1,63 @@
+version: '3.8'
+
+#postgres -----------------------------------------------------
+services:
+  postgres-wishlist:
+    image: postgres
+    container_name: postgres-wishlist
+    environment:
+      POSTGRES_USER: ginitoru
+      POSTGRES_PASSWORD: Argon7856321!@#&*GFFD!
+      POSTGRES_DB: wishlist
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+  #mongo--------------------------------------------------------
+  mongo-connector:
+    image: mongo
+    container_name: mongo-connector
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ginitoru
+      ME_CONFIG_MONGODB_ADMINPASSWORD: Argon7856321!@#&*GFFD!
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-volume:/data/db
+
+
+  #mysql--------------------------------------------------------
+  mysql:
+    image: mysql
+    container_name: mysql
+    environment:
+      MYSQL_DATABASE: inventory
+      MYSQL_USER: ginitoru
+      MYSQL_PASSWORD: Argon7856321!@#&*GFFD!
+      MYSQL_ROOT_PASSWORD: Argon7856321!@#&*GFFD!
+    volumes:
+      - mysql-volume:/var/lib/mysql
+    cap_add:
+      - SYS_NICE
+    ports:
+      - '3306:3306'
+
+  #redis--------------------------------------------------------
+  redis:
+    image: redis:alpine
+    container_name: redis-basket
+    command: redis-server --requirepass Argon7856321!@#&*GFFD!
+    volumes:
+      - redis-volume:/data
+    ports:
+      - '6379:6379'
+
+networks:
+  default:
+
+volumes:
+  postgres-volume:
+  mongo-volume:
+  redis-volume:
+  mysql-volume:
