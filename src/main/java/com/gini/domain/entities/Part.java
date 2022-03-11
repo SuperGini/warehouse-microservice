@@ -4,6 +4,7 @@ import com.gini.domain.enums.Constructor;
 import com.gini.domain.enums.Manufacturer;
 import lombok.*;
 
+import javax.persistence.Entity;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Objects;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class Part {
 
     private UUID id;
