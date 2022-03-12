@@ -1,12 +1,10 @@
 package com.gini.domain.entities;
 
+import com.sun.istack.NotNull;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -26,7 +24,10 @@ public class Suplayer {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
+    @Column(name = "id", nullable = false, unique = true, updatable = false)
     private UUID id;
+
+    @Column(name = "name", nullable = false)
     private String name;
 
     @ManyToMany

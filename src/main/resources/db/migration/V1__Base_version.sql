@@ -1,4 +1,3 @@
-
 CREATE TABLE IF NOT EXISTS price (
     id       BINARY(255) NOT NULL UNIQUE,
     price    DECIMAL(19,2) NOT NULL,

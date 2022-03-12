@@ -3,6 +3,7 @@ package com.gini.domain.entities;
 import com.gini.domain.enums.Constructor;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -25,6 +26,7 @@ public class CarModel {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
+    @Column(name = "id", nullable = false, unique = true, updatable = false)
     private UUID id;
 
     @Enumerated(EnumType.STRING)

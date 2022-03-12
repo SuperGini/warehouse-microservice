@@ -1,8 +1,10 @@
 package com.gini.domain.entities;
 
+import com.sun.istack.NotNull;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -25,11 +27,19 @@ public class Price {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
+    @Column(name = "id", nullable = false, updatable = false, unique = true)
     private UUID id;
 
+    @Column(name = "price", nullable = false)
     private BigDecimal price;
+
+    @Column(name = "discount")
     private BigDecimal discount;
+
+    @Column(name = "currency")
     private Currency currency;
+
+    @Column(name = "vat")
     private BigDecimal vat;
 
     @Override

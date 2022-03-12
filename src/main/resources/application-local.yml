@@ -2,6 +2,14 @@ spring:
   application:
     name: inventory-parts
 
+# Flyway -------------------------------------------------------------------------------
+  flyway:
+    locations: classpath:db/migration
+    enabled: true
+    user: ${DB_USER:ginitoru}
+    password: ${DB_PASSWORD:Argon7856321!@#&*GFFD!}
+    schemas: ${DB_NAME:inventory}
+# ----------------------------------------------------------------------------------------
   datasource:
     url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:inventory}
     username: ${DB_USER:ginitoru}
@@ -36,6 +44,9 @@ spring:
 
 server:
   port: 8080
+
+
+
 
 logging:
   level:
