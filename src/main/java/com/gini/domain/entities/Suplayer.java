@@ -5,7 +5,11 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Getter
@@ -16,6 +20,7 @@ import java.util.UUID;
 @Entity
 public class Suplayer {
 
+    @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
             name = "UUID",
@@ -25,5 +30,18 @@ public class Suplayer {
     private String name;
 
     @ManyToMany
-    private Part part;
+    private List<Part> parts = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Suplayer suplayer = (Suplayer) o;
+        return Objects.equals(id, suplayer.id) && Objects.equals(name, suplayer.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
+    }
 }

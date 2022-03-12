@@ -8,7 +8,9 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import java.util.Objects;
 import java.util.UUID;
 
 @Getter
@@ -17,6 +19,7 @@ import java.util.UUID;
 @Entity
 public class Comment {
 
+    @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
             name = "UUID",
@@ -29,4 +32,17 @@ public class Comment {
 
     @ManyToOne
     private Part part;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Comment comment = (Comment) o;
+        return Objects.equals(id, comment.id) && Objects.equals(user, comment.user);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, user);
+    }
 }

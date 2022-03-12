@@ -7,8 +7,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
@@ -34,20 +33,20 @@ public class Part {
     @OneToOne
     private Price price;
 
-    @ManyToMany
-    private Suplayer suplayer;
+    @ManyToMany(mappedBy = "parts")
+    private List<Suplayer> suplayers = new ArrayList<>();
 
-    @ManyToMany
-    private CarModel carModel;
+    @ManyToMany(mappedBy = "parts")
+    private Set<CarModel> carModels = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     private Constructor constructor;
 
     @OneToOne
-    private PartSpecifications partSpecifications;
+    private PartSpecification partSpecifications;
 
     @OneToMany(mappedBy = "part")
-    private Comment comment;
+    private Set<Comment> comments = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     private Manufacturer manufacturer;

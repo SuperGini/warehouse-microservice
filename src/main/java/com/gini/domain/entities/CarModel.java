@@ -4,10 +4,11 @@ import com.gini.domain.enums.Constructor;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -18,12 +19,15 @@ import java.util.UUID;
 @Entity
 public class CarModel {
 
+    @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     private UUID id;
+
+    @Enumerated(EnumType.STRING)
     private Constructor constructor;
     private String model;
 
@@ -31,5 +35,18 @@ public class CarModel {
     private String engineType;
 
     @ManyToMany
-    private Part part;
+    private Set<Part> parts = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CarModel carModel = (CarModel) o;
+        return constructor == carModel.constructor && Objects.equals(model, carModel.model);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(constructor, model);
+    }
 }
