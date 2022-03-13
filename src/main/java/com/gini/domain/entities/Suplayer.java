@@ -33,6 +33,10 @@ public class Suplayer {
     @ManyToMany
     private List<Part> parts = new ArrayList<>();
 
+    @OneToMany(mappedBy = "suplayer")
+    @Column(name = "part_count")
+    private List<Count> count = new ArrayList<>();
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

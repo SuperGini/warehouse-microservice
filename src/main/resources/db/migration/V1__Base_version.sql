@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS part (
     manufacturer           VARCHAR(255) DEFAULT NULL,
     part_name              VARCHAR(255) NOT NULL,
     part_number            VARCHAR(255) NOT NULL,
+    part_count             DECIMAL(19,2),
     part_specifications_id BINARY(255)  NOT NULL,
     price_id               BINARY(255)  NOT NULL,
     PRIMARY KEY (id),
@@ -50,6 +51,16 @@ CREATE TABLE IF NOT EXISTS suplayer (
     id   BINARY(255) NOT NULL UNIQUE,
     name VARCHAR(255) DEFAULT NULL,
     PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS part_count(
+     id BINARY(255) NOT NULL UNIQUE,
+     suplayer_part_count DECIMAL(19,2),
+     part_id BINARY(255) DEFAULT NULL,
+     suplayer_id BINARY(255) DEFAULT NULL,
+     PRIMARY KEY(id),
+     FOREIGN KEY(part_id) REFERENCES part(id),
+     FOREIGN KEY(suplayer_id) REFERENCES suplayer(id)
 );
 
 CREATE TABLE IF NOT EXISTS suplayer_parts (

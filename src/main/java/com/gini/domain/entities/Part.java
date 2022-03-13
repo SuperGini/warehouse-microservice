@@ -9,6 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.math.BigInteger;
 import java.time.OffsetDateTime;
 import java.util.*;
 
@@ -29,8 +30,14 @@ public class Part {
     @Column(name = "id", updatable = false, nullable = false, unique = true)
     private UUID id;
 
-    @NotNull
+    @Column(name = "part_name", nullable = false)
     private String partName;
+
+    @Column(name = "part_count", nullable = false)
+    private BigInteger partCount;
+
+    @OneToOne(mappedBy = "part")
+    private Count suplayerPartCount;
 
     @Column(name = "part_number", nullable = false, unique = true)
     private String partNumber;
@@ -61,7 +68,6 @@ public class Part {
 
     @Enumerated(EnumType.STRING)
     private Manufacturer manufacturer;
-
 
     @Override
     public boolean equals(Object o) {
