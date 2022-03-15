@@ -3,6 +3,7 @@ package com.gini.domain.entities;
 import com.gini.domain.enums.Constructor;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -26,12 +27,12 @@ public class CarModel {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     @Column(name = "id", nullable = false, unique = true, updatable = false)
+    @Type(type = "uuid-char")
     private UUID id;
 
     @Enumerated(EnumType.STRING)
     private Constructor constructor;
     private String model;
-
     private LocalDate year;
     private String engineType;
 

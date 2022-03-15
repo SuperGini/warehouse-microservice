@@ -1,5 +1,8 @@
 package com.gini.domain.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum Manufacturer {
 
     LUK("Luk"),
@@ -7,7 +10,7 @@ public enum Manufacturer {
     BOSCH("Bosch"),
     SAKS("Saks");
 
-    public final String manufacturer;
+    private final String manufacturer;
 
     Manufacturer(String manufacturer) {
         this.manufacturer = manufacturer;

@@ -3,6 +3,7 @@ package com.gini.domain.entities;
 import com.sun.istack.NotNull;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,6 +29,7 @@ public class Price {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     @Column(name = "id", nullable = false, updatable = false, unique = true)
+    @Type(type = "uuid-char")
     private UUID id;
 
     @Column(name = "price", nullable = false)

@@ -1,5 +1,8 @@
 package com.gini.domain.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum Constructor {
 
     DACIA("Dacia"),
@@ -13,7 +16,7 @@ public enum Constructor {
     RENAULT("renault");
 
 
-    public final String constructor;
+    private final String constructor;
 
     Constructor(String constructor) {
         this.constructor = constructor;

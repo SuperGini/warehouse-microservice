@@ -6,6 +6,7 @@ import com.sun.istack.NotNull;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -28,6 +29,7 @@ public class Part {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     @Column(name = "id", updatable = false, nullable = false, unique = true)
+    @Type(type = "uuid-char") // -> so we can save the uuid as a varchar in database and not binary
     private UUID id;
 
     @Column(name = "part_name", nullable = false)
@@ -36,7 +38,7 @@ public class Part {
     @Column(name = "part_count", nullable = false)
     private BigInteger partCount;
 
-    @OneToOne(mappedBy = "part")
+    @OneToOne(mappedBy = "part", cascade = CascadeType.PERSIST)
     private Count suplayerPartCount;
 
     @Column(name = "part_number", nullable = false, unique = true)
@@ -56,9 +58,6 @@ public class Part {
 
     @ManyToMany(mappedBy = "parts", cascade = CascadeType.PERSIST)
     private Set<CarModel> carModels = new HashSet<>();
-
-    @Enumerated(EnumType.STRING)
-    private Constructor constructor;
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private PartSpecification partSpecifications;
