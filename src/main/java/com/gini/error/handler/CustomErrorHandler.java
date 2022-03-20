@@ -4,12 +4,15 @@ import com.gini.controller.response.base.ResponseStatus;
 import com.gini.controller.response.base.ResponseStatusCode;
 import com.gini.controller.response.base.RestResponse;
 import com.gini.error.handler.errors.ErrorResponse;
+import com.gini.error.handler.exceptions.PartAlreadyExists;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -17,6 +20,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @ControllerAdvice
 @RestController
 public class CustomErrorHandler extends ResponseEntityExceptionHandler {
@@ -54,4 +58,21 @@ public class CustomErrorHandler extends ResponseEntityExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(field, message);
         errors.add(errorResponse);
     }
+
+    @ExceptionHandler(PartAlreadyExists.class)
+    public ResponseEntity<Object> handlePartAlreadyExistsException(PartAlreadyExists ex){
+        log.error("Duplicated part found: ", ex);
+
+        ResponseStatus responseStatus = new ResponseStatus(ResponseStatusCode.DUPLICATE_PART_FOUND,
+                ResponseStatusCode.DUPLICATE_PART_FOUND.getMessage());
+
+        RestResponse<String> restResponse = new RestResponse<>();
+        restResponse.setResponseStatus(responseStatus);
+
+        return ResponseEntity.badRequest().body(restResponse);
+    }
+
+
+
+
 }

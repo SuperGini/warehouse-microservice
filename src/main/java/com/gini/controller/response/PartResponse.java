@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigInteger;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Builder
@@ -23,6 +24,7 @@ public class PartResponse {
     private String partSpecification;
     private String manufacturer;
     private String status;
+
 
 
 }

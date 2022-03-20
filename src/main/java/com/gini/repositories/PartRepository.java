@@ -1,5 +1,6 @@
 package com.gini.repositories;
 
+import com.gini.domain.dto.PartNumberDto;
 import com.gini.domain.entities.Part;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,4 +13,6 @@ public interface PartRepository extends JpaRepository<Part, UUID> {
 
     @Override
     Optional<Part> findById(UUID uuid);
+
+    Optional<PartNumberDto> findByPartNumber(String partNumber);
 }

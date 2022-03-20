@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS part
     updated                DATETIME     DEFAULT (UTC_TIMESTAMP()),
     manufacturer           VARCHAR(255) DEFAULT NULL,
     part_name              VARCHAR(255) NOT NULL,
-    part_number            VARCHAR(255) NOT NULL,
+    part_number            VARCHAR(255) NOT NULL UNIQUE,
     part_count             DECIMAL(19, 2),
     part_specifications_id VARCHAR(255),
     price_id               VARCHAR(255),

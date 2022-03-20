@@ -7,7 +7,8 @@ public enum ResponseStatusCode {
 
     CREATED("created"),
     UPDATED("updated"),
-    VALIDATION_ERROR("Validation error");
+    VALIDATION_ERROR("validation error"),
+    DUPLICATE_PART_FOUND("part already exists");
 
 
 

@@ -2,7 +2,6 @@ package com.gini.controller;
 
 import com.gini.controller.request.PartRequest;
 import com.gini.controller.response.PartResponse;
-import com.gini.controller.response.base.RestResponse;
 import com.gini.services.PartService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
