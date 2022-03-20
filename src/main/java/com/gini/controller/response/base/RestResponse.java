@@ -1,4 +1,4 @@
-package com.gini.controller.response;
+package com.gini.controller.response.base;
 
 import lombok.Getter;
 import lombok.Setter;

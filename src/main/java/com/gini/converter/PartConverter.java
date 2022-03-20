@@ -1,6 +1,8 @@
 package com.gini.converter;
 
 import com.gini.controller.request.PartRequest;
+import com.gini.controller.response.PartResponse;
+import com.gini.controller.response.PriceResponse;
 import com.gini.domain.entities.*;
 import com.gini.domain.enums.Constructor;
 import com.gini.domain.enums.Manufacturer;
@@ -40,6 +42,29 @@ public class PartConverter {
 
         return part;
     }
+
+    public PartResponse convertToPartResponse(Part part){
+
+        PriceResponse priceResponse = PriceResponse.builder()
+                .price(part.getPrice().getPrice())
+                .discount(part.getPrice().getDiscount())
+                .currency(part.getPrice().getCurrency())
+                .vat(part.getPrice().getVat())
+                .build();
+
+       return  PartResponse.builder()
+                .id(part.getId())
+                .partName(part.getPartName())
+                .partCount(part.getPartCount())
+                .partNumber(part.getPartNumber())
+                .partPrice(priceResponse)
+                .manufacturer(part.getManufacturer().getManufacturer())
+                .build();
+    }
+
+
+
+
 
     private Count getCount(PartRequest request) {
         Count partCount = new Count();

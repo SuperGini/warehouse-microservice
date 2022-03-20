@@ -1,8 +1,8 @@
 package com.gini.error.handler;
 
-import com.gini.controller.response.ResponseStatus;
-import com.gini.controller.response.ResponseStatusCode;
-import com.gini.controller.response.RestResponse;
+import com.gini.controller.response.base.ResponseStatus;
+import com.gini.controller.response.base.ResponseStatusCode;
+import com.gini.controller.response.base.RestResponse;
 import com.gini.error.handler.errors.ErrorResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

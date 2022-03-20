@@ -1,11 +1,11 @@
 package com.gini.controller;
 
 import com.gini.controller.request.PartRequest;
-import com.gini.domain.entities.Part;
+import com.gini.controller.response.PartResponse;
+import com.gini.controller.response.base.RestResponse;
 import com.gini.services.PartService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,14 +20,12 @@ public record PartController(
 ) {
 
 
-
-    @PostMapping("/parts")          //for the @Valid to work we need Hibernate Validator on classpath
+    @PostMapping("/parts")
+        //for the @Valid to work we need Hibernate Validator on classpath
     ResponseEntity<Object> createPart(@Valid @RequestBody PartRequest request) {
 
-        Part part = partService.create(request);
+        PartResponse partResponse = partService.create(request);
 
-        System.out.println(part.getId().toString());
-
-        return new ResponseEntity<>(part.getId().toString(), HttpStatus.CREATED);
+        return new ResponseEntity<>(partResponse, HttpStatus.CREATED);
     }
 }

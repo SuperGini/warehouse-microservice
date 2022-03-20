@@ -1,13 +1,14 @@
-package com.gini.controller.response;
+package com.gini.controller.response.base;
 
 import lombok.Getter;
 
 @Getter
 public enum ResponseStatusCode {
 
-    OK("ok"),
-    ERROR("error"),
+    CREATED("created"),
+    UPDATED("updated"),
     VALIDATION_ERROR("Validation error");
+
 
 
     private final String message;
