@@ -39,7 +39,7 @@ public class Price {
     private BigDecimal discount;
 
     @Column(name = "currency")
-    private Currency currency;
+    private String currency;
 
     @Column(name = "vat")
     private BigDecimal vat;

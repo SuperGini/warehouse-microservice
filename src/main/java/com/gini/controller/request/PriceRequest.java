@@ -1,18 +1,19 @@
 package com.gini.controller.request;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.gini.validations.annotation.ValidCurrency;
 import com.sun.istack.NotNull;
 import lombok.Data;
 
-import java.util.Currency;
+import javax.validation.Valid;
 
 @Data
+
 public class PriceRequest {
 
     @NotNull
     private String price;
 
     @NotNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private Currency currency;
+    @ValidCurrency
+    private String currency;
 }
