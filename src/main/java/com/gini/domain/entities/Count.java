@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.math.BigInteger;
@@ -24,6 +25,7 @@ public class Count {
     @GenericGenerator(
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator")
+    @Type(type = "uuid-char")
     private UUID id;
 
     @Column(name = "suplayer_Part_Count")
@@ -40,12 +42,12 @@ public class Count {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Count count1 = (Count) o;
-        return Objects.equals(suplayerPartCount, count1.suplayerPartCount);
+        Count count = (Count) o;
+        return Objects.equals(part, count.part) && Objects.equals(suplayer, count.suplayer);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(suplayerPartCount);
+        return Objects.hash(part, suplayer);
     }
 }

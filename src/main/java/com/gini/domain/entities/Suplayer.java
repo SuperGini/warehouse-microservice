@@ -3,6 +3,7 @@ package com.gini.domain.entities;
 import com.sun.istack.NotNull;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class Suplayer {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     @Column(name = "id", nullable = false, unique = true, updatable = false)
+    @Type(type = "uuid-char")
     private UUID id;
 
     @Column(name = "name", nullable = false)

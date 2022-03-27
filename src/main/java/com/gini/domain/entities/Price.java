@@ -3,11 +3,13 @@ package com.gini.domain.entities;
 import com.sun.istack.NotNull;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.Objects;
@@ -28,6 +30,7 @@ public class Price {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     @Column(name = "id", nullable = false, updatable = false, unique = true)
+    @Type(type = "uuid-char")
     private UUID id;
 
     @Column(name = "price", nullable = false)
@@ -37,10 +40,13 @@ public class Price {
     private BigDecimal discount;
 
     @Column(name = "currency")
-    private Currency currency;
+    private String currency;
 
     @Column(name = "vat")
     private BigDecimal vat;
+
+    @OneToOne(mappedBy = "price")
+    private Part part;
 
     @Override
     public boolean equals(Object o) {

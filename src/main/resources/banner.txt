@@ -1,0 +1,9 @@
+
+
+${AnsiColor.BRIGHT_BLUE}███████╗${AnsiColor.BRIGHT_BLUE} ██████╗ ██████╗ ██╗███╗   ██╗ ██████╗     ${AnsiColor.RED}██████╗  ██████╗  ██████╗ ${AnsiColor.RED}████████╗
+${AnsiColor.BRIGHT_BLUE}██╔════╝${AnsiColor.BRIGHT_BLUE} ██╔══██╗██╔══██╗██║████╗  ██║██╔════╝     ${AnsiColor.RED}██╔══██╗██╔═══██╗██╔═══██╗╚══${AnsiColor.RED}██╔══╝
+${AnsiColor.BRIGHT_BLUE}███████╗${AnsiColor.BRIGHT_BLUE} ██████╔╝██████╔╝██║██╔██╗ ██║██║  ███╗   ${AnsiColor.RED} ██████╔╝██║   ██║██║   ██║   ${AnsiColor.RED}██║
+${AnsiColor.BRIGHT_BLUE}╚════██║${AnsiColor.BRIGHT_BLUE} ██╔═══╝ ██╔══██╗██║██║╚██╗██║██║   ██║    ${AnsiColor.RED}██╔══██╗██║   ██║██║   ██║   ${AnsiColor.RED}██║
+${AnsiColor.BRIGHT_BLUE}███████║${AnsiColor.BRIGHT_BLUE} ██║     ██║  ██║██║██║ ╚████║╚██████╔╝    ${AnsiColor.RED}██████╔╝╚██████╔╝╚██████╔╝   ${AnsiColor.RED}██║
+${AnsiColor.BRIGHT_BLUE}╚══════╝${AnsiColor.BRIGHT_BLUE} ╚═╝     ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝     ${AnsiColor.RED}╚═════╝  ╚═════╝  ╚═════╝    ${AnsiColor.RED}╚═╝
+                                                                                       ${AnsiColor.BRIGHT_YELLOW}${spring-boot.version} powered by Ginitoru
