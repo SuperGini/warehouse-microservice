@@ -1,8 +1,7 @@
 package com.gini.error.handler;
 
-import com.gini.controller.response.base.ResponseStatus;
-import com.gini.controller.response.base.ResponseStatusCode;
-import com.gini.controller.response.base.RestResponse;
+import com.gini.controller.response.base.ErrorCode;
+import com.gini.controller.response.base.RestErrorResponse;
 import com.gini.error.handler.errors.ErrorResponse;
 import com.gini.error.handler.exceptions.PartAlreadyExists;
 import lombok.extern.slf4j.Slf4j;
@@ -11,9 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -21,8 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@ControllerAdvice
-@RestController
+@RestControllerAdvice
 public class CustomErrorHandler extends ResponseEntityExceptionHandler {
 
     @Override
@@ -31,24 +28,23 @@ public class CustomErrorHandler extends ResponseEntityExceptionHandler {
                                                                   HttpStatus status,
                                                                   WebRequest request) {
 
-        RestResponse<List<ErrorResponse>> restResponse = createErrorResponse(ex);
+        RestErrorResponse<List<ErrorResponse>> restResponse = createErrorResponse(ex);
 
         return ResponseEntity.badRequest().body(restResponse);
     }
 
-    private RestResponse<List<ErrorResponse>> createErrorResponse(MethodArgumentNotValidException ex) {
+    private RestErrorResponse<List<ErrorResponse>> createErrorResponse(MethodArgumentNotValidException ex) {
+
         List<ErrorResponse> errors = new ArrayList<>();
 
         ex.getBindingResult()
-          .getFieldErrors()
-          .forEach( error -> addErrorToErrorsList(errors, error));
+                .getFieldErrors()
+                .forEach(error -> addErrorToErrorsList(errors, error));
 
-        ResponseStatus responseStatus = new ResponseStatus(ResponseStatusCode.VALIDATION_ERROR,
-                                                            ResponseStatusCode.VALIDATION_ERROR.getMessage());
-
-        RestResponse<List<ErrorResponse>> restResponse = new RestResponse<>();
-        restResponse.setResponseStatus(responseStatus);
-        restResponse.setResponse(errors);
+        RestErrorResponse<List<ErrorResponse>> restResponse = new RestErrorResponse<>();
+        restResponse.setErrorCode(ErrorCode.VALIDATION_ERROR);
+        restResponse.setErrorMessage(ErrorCode.VALIDATION_ERROR.getMessage());
+        restResponse.setErrors(errors);
         return restResponse;
     }
 
@@ -60,19 +56,15 @@ public class CustomErrorHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(PartAlreadyExists.class)
-    public ResponseEntity<Object> handlePartAlreadyExistsException(PartAlreadyExists ex){
-        log.error("Duplicated part found: ", ex);
+    public ResponseEntity<Object> handlePartAlreadyExistsException(PartAlreadyExists ex) {
+        log.error("Duplicate part found in database: ", ex);
 
-        ResponseStatus responseStatus = new ResponseStatus(ResponseStatusCode.DUPLICATE_PART_FOUND,
-                ResponseStatusCode.DUPLICATE_PART_FOUND.getMessage());
-
-        RestResponse<String> restResponse = new RestResponse<>();
-        restResponse.setResponseStatus(responseStatus);
+        RestErrorResponse<String> restResponse = new RestErrorResponse<>();
+        restResponse.setErrorCode(ErrorCode.DUPLICATE_PART_FOUND);
+        restResponse.setErrorMessage(ErrorCode.DUPLICATE_PART_FOUND.getMessage());
 
         return ResponseEntity.badRequest().body(restResponse);
     }
-
-
 
 
 }

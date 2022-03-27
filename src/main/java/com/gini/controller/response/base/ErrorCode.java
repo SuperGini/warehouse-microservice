@@ -3,18 +3,14 @@ package com.gini.controller.response.base;
 import lombok.Getter;
 
 @Getter
-public enum ResponseStatusCode {
+public enum ErrorCode {
 
-    CREATED("created"),
-    UPDATED("updated"),
     VALIDATION_ERROR("validation error"),
     DUPLICATE_PART_FOUND("part already exists");
 
-
-
     private final String message;
 
-    ResponseStatusCode(String message) {
+    ErrorCode(String message) {
         this.message = message;
     }
 }

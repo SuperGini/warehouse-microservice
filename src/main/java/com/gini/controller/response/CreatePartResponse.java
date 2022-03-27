@@ -2,17 +2,20 @@ package com.gini.controller.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigInteger;
-import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Builder
 @Data
+@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PartResponse {
+@NoArgsConstructor
+public class CreatePartResponse {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private UUID id;
@@ -20,11 +23,7 @@ public class PartResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigInteger partCount;
     private String partNumber;
-    private PriceResponse partPrice;
+    private PriceResponse price;
     private String partSpecification;
     private String manufacturer;
-    private String status;
-
-
-
 }

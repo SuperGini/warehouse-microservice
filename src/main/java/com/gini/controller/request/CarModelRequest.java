@@ -1,7 +1,9 @@
 package com.gini.controller.request;
 
-import com.sun.istack.NotNull;
+
 import lombok.Data;
+
+import javax.validation.constraints.NotNull;
 
 @Data
 public class CarModelRequest {

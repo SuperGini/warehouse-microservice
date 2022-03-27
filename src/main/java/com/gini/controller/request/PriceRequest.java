@@ -1,13 +1,10 @@
 package com.gini.controller.request;
 
 import com.gini.validations.annotation.ValidCurrency;
-import com.sun.istack.NotNull;
 import lombok.Data;
-
-import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @Data
-
 public class PriceRequest {
 
     @NotNull

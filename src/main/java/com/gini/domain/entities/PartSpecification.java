@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -17,6 +18,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @Entity
+@Table(name = "part_specification")
 public class PartSpecification {
 
     @Id
@@ -27,6 +29,8 @@ public class PartSpecification {
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     @Type(type = "uuid-char")
     private UUID id;
+
+    @Column(name = "specifications")
     private String specifications;
 
 
