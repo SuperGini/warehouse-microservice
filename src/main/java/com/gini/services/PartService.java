@@ -13,4 +13,7 @@ public interface PartService {
 
     @Transactional
     List<ListPartsResponse> findAllPartsWithPagination(String pageNumber);
+
+    @Transactional
+    Integer findPartsCount();
 }

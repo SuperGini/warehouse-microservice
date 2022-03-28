@@ -22,7 +22,6 @@ public record PartController(
         PartService partService
 ) {
 
-
     @PostMapping("/parts")
     public ResponseEntity<Object> createPart(@Valid @RequestBody PartRequest request) {
 
@@ -39,4 +38,14 @@ public record PartController(
 
         return new ResponseEntity<>(parts, HttpStatus.OK);
     }
+
+    @GetMapping("/parts/count")
+    public ResponseEntity<Integer>  findPartsCount(){
+
+        Integer count = partService().findPartsCount();
+
+        return new ResponseEntity<>(count, HttpStatus.OK);
+    }
+
+
 }
