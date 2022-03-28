@@ -46,6 +46,4 @@ public record PartController(
 
         return new ResponseEntity<>(count, HttpStatus.OK);
     }
-
-
 }

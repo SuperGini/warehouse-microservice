@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class RestErrorResponse<T> {
+public class RestErrorResponse<T> implements ErrorResponse{
 
     private ErrorCode errorCode;
     private String errorMessage;

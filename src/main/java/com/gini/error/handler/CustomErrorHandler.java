@@ -59,11 +59,26 @@ public class CustomErrorHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handlePartAlreadyExistsException(PartAlreadyExists ex) {
         log.error("Duplicate part found in database: ", ex);
 
-        RestErrorResponse<String> restResponse = new RestErrorResponse<>();
-        restResponse.setErrorCode(ErrorCode.DUPLICATE_PART_FOUND);
-        restResponse.setErrorMessage(ErrorCode.DUPLICATE_PART_FOUND.getMessage());
+        RestErrorResponse<String> restResponse = createErrorResponseBody(ErrorCode.DUPLICATE_PART_FOUND);
 
         return ResponseEntity.badRequest().body(restResponse);
+    }
+
+    @ExceptionHandler(NumberFormatException.class)
+    public ResponseEntity<com.gini.controller.response.base.ErrorResponse> handleNumberFormatException(NumberFormatException ex) {
+        log.error("The format {} is wrong. Accepting only numbers: ", ex.getMessage().toLowerCase(), ex);
+
+        RestErrorResponse<String> restErrorResponse = createErrorResponseBody(ErrorCode.INVALID_FORMAT);
+
+        return ResponseEntity.badRequest().body(restErrorResponse);
+    }
+
+
+    private RestErrorResponse<String> createErrorResponseBody(ErrorCode errorCode) {
+        RestErrorResponse<String> restResponse = new RestErrorResponse<>();
+        restResponse.setErrorCode(errorCode);
+        restResponse.setErrorMessage(errorCode.getMessage());
+        return restResponse;
     }
 
 

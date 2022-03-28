@@ -6,7 +6,8 @@ import lombok.Getter;
 public enum ErrorCode {
 
     VALIDATION_ERROR("validation error"),
-    DUPLICATE_PART_FOUND("part already exists");
+    DUPLICATE_PART_FOUND("part already exists"),
+    INVALID_FORMAT("invalid format");
 
     private final String message;
 
