@@ -21,7 +21,7 @@ public class CreatePartResponse {
     private UUID id;
     private String partName;
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private BigInteger partCount;
+    private Integer partCount;
     private String partNumber;
     private PriceResponse price;
     private String partSpecification;

@@ -29,7 +29,7 @@ public class PartConverter {
 
         Part part = Part.builder()
                 .manufacturer(Manufacturer.valueOf(request.getManufacturer()))
-                .partCount(new BigInteger(request.getPartCount()))
+                .partCount(Integer.parseInt(request.getPartCount()))
                 .partNumber(request.getPartNumber())
                 .partName(request.getPartName())
                 .carModels(Set.of(carModel))
@@ -76,7 +76,7 @@ public class PartConverter {
        return  ListPartsResponse.builder()
                 .id(part.id())
                 .partName(part.partName())
-                .partCount(part.partCount())
+                .partCount(BigInteger.valueOf(part.partCount()))
                 .partNumber(part.partNumber())
                 .price(priceResponse)
                 .manufacturer(part.manufacturer().getManufacturer())

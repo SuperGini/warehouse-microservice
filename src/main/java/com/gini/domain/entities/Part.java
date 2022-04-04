@@ -36,7 +36,7 @@ public class Part {
     private String partName;
 
     @Column(name = "part_count", nullable = false)
-    private BigInteger partCount;
+    private Integer partCount;
 
     @OneToOne(mappedBy = "part", cascade = CascadeType.PERSIST)
     private Count suplayerPartCount;
