@@ -1,9 +1,11 @@
 package com.gini.error.handler;
 
+import com.gini.controller.response.base.Error;
 import com.gini.controller.response.base.ErrorCode;
 import com.gini.controller.response.base.RestErrorResponse;
 import com.gini.error.handler.errors.ErrorResponse;
 import com.gini.error.handler.exceptions.PartAlreadyExists;
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -48,12 +50,6 @@ public class CustomErrorHandler extends ResponseEntityExceptionHandler {
         return restResponse;
     }
 
-    private void addErrorToErrorsList(List<ErrorResponse> errors, FieldError x) {
-        String field = x.getField();
-        String message = x.getDefaultMessage();
-        ErrorResponse errorResponse = new ErrorResponse(field, message);
-        errors.add(errorResponse);
-    }
 
     @ExceptionHandler(PartAlreadyExists.class)
     public ResponseEntity<Object> handlePartAlreadyExistsException(PartAlreadyExists ex) {
@@ -65,10 +61,19 @@ public class CustomErrorHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(NumberFormatException.class)
-    public ResponseEntity<com.gini.controller.response.base.ErrorResponse> handleNumberFormatException(NumberFormatException ex) {
+    public ResponseEntity<Error> handleNumberFormatException(NumberFormatException ex) {
         log.error("The format {} is wrong. Accepting only numbers: ", ex.getMessage().toLowerCase(), ex);
 
         RestErrorResponse<String> restErrorResponse = createErrorResponseBody(ErrorCode.INVALID_FORMAT);
+
+        return ResponseEntity.badRequest().body(restErrorResponse);
+    }
+
+    @ExceptionHandler(MysqlDataTruncation.class)
+    public ResponseEntity<Error> handleMysqlDataTruncation(MysqlDataTruncation ex){
+        log.error("The number of parts can not be below zero. ", ex);
+
+        RestErrorResponse<String> restErrorResponse = createErrorResponseBody(ErrorCode.NEGATIVE_PART_COUNT);
 
         return ResponseEntity.badRequest().body(restErrorResponse);
     }
@@ -79,6 +84,13 @@ public class CustomErrorHandler extends ResponseEntityExceptionHandler {
         restResponse.setErrorCode(errorCode);
         restResponse.setErrorMessage(errorCode.getMessage());
         return restResponse;
+    }
+
+    private void addErrorToErrorsList(List<ErrorResponse> errors, FieldError x) {
+        String field = x.getField();
+        String message = x.getDefaultMessage();
+        ErrorResponse errorResponse = new ErrorResponse(field, message);
+        errors.add(errorResponse);
     }
 
 

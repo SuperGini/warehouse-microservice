@@ -1,6 +1,6 @@
 package com.gini.converter;
 
-import com.gini.controller.request.PartRequest;
+import com.gini.controller.request.CreatePartRequest;
 import com.gini.controller.response.CreatePartResponse;
 import com.gini.controller.response.ListPartsResponse;
 import com.gini.controller.response.PriceResponse;
@@ -20,7 +20,7 @@ import java.util.Set;
 @UtilityClass
 public class PartConverter {
 
-    public Part convert(PartRequest request) {
+    public Part convert(CreatePartRequest request) {
 
         Price price = getPrice(request);
         Count partCount = getCount(request);
@@ -32,7 +32,7 @@ public class PartConverter {
                 .partCount(Integer.parseInt(request.getPartCount()))
                 .partNumber(request.getPartNumber())
                 .partName(request.getPartName())
-                .carModels(Set.of(carModel))
+                .carModels(List.of(carModel))
                 .suplayers(List.of(suplayer))
                 .suplayerPartCount(partCount)
                 .price(price)
@@ -40,7 +40,8 @@ public class PartConverter {
 
         partCount.setPart(part);
         partCount.setSuplayer(suplayer);
-        carModel.setParts(Set.of(part));
+        carModel.setParts(List.of(part));
+        suplayer.setParts(List.of(part));
 
         return part;
     }
@@ -83,13 +84,13 @@ public class PartConverter {
                 .build();
     }
 
-    private Count getCount(PartRequest request) {
+    private Count getCount(CreatePartRequest request) {
         Count partCount = new Count();
         partCount.setSuplayerPartCount(new BigInteger(request.getPartCount()));
         return partCount;
     }
 
-    private CarModel getCarModel(PartRequest request) {
+    private CarModel getCarModel(CreatePartRequest request) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
         return CarModel.builder()
@@ -100,14 +101,14 @@ public class PartConverter {
                 .build();
     }
 
-    private Suplayer getSuplayer(PartRequest request, Count partCount) {
+    private Suplayer getSuplayer(CreatePartRequest request, Count partCount) {
         Suplayer suplayer = new Suplayer();
         suplayer.setName(request.getSuplayerName());
         suplayer.setCount(List.of(partCount));
         return suplayer;
     }
 
-    private Price getPrice(PartRequest request) {
+    private Price getPrice(CreatePartRequest request) {
         Price price = new Price();
         price.setCurrency(request.getPartPrice().getCurrency());
         price.setPrice(new BigDecimal(request.getPartPrice().getPrice()));

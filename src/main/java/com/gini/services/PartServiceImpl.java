@@ -1,6 +1,7 @@
 package com.gini.services;
 
-import com.gini.controller.request.PartRequest;
+import com.gini.controller.request.CreatePartRequest;
+import com.gini.controller.request.UpdatePartRequest;
 import com.gini.controller.response.CreatePartResponse;
 import com.gini.controller.response.ListPartsResponse;
 import com.gini.converter.PartConverter;
@@ -13,7 +14,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -26,7 +30,7 @@ public class PartServiceImpl implements PartService {
 
     @Override
     @Transactional
-    public CreatePartResponse create(PartRequest request) {
+    public CreatePartResponse create(CreatePartRequest request) {
 
         checkIfPartAlreadyExists(request);
 
@@ -54,14 +58,60 @@ public class PartServiceImpl implements PartService {
 
     @Override
     @Transactional
-    public Integer findPartsCount(){
+    public Integer findPartsCount() {
         return partRepository.contPartNumber();
     }
 
-    private void checkIfPartAlreadyExists(PartRequest request) {
+    private void checkIfPartAlreadyExists(CreatePartRequest request) {
         partRepository.findByPartNumber(request.getPartNumber())
                 .ifPresent(s -> {
                     throw new PartAlreadyExists("Part already exists in database. Another one can't be created");
                 });
+    }
+
+    @Override
+    @Transactional
+    public int addParts(UpdatePartRequest partRequest) {
+
+        UUID partId = UUID.fromString(partRequest.getPartId());
+        UUID suplayerId = UUID.fromString(partRequest.getSuplayer().getSuplayerId());
+
+        Optional<Part> part = partRepository.findPartToUpdate(partId, suplayerId);
+
+
+        if (part.isPresent()) {
+
+            Part updatePart = part.get();
+
+            Integer partCount = updatePart.getPartCount() + Integer.parseInt(partRequest.getPartCount());
+
+            BigInteger suplayerCount = updatePart.getSuplayerPartCount().getSuplayerPartCount()
+                                                        .add(
+                                                            new BigInteger(partRequest.getPartCount()));
+
+            updatePart.setPartCount(partCount);
+            updatePart.getSuplayerPartCount().setSuplayerPartCount(suplayerCount);
+
+
+            partRepository.save(updatePart);
+
+
+        }
+
+        return 0;
+
+    }
+
+    @Override
+    @Transactional
+    public void updatePart(String partId, String suplayerId) {
+
+//        UUID one = UUID.fromString(partId);
+//
+//        UUID two = UUID.fromString(suplayerId);
+//
+//        Part partx =partRepository.findPartToUpdate(one, two);
+
+        System.out.println("xxxx");
     }
 }

@@ -7,7 +7,8 @@ public enum ErrorCode {
 
     VALIDATION_ERROR("validation error"),
     DUPLICATE_PART_FOUND("part already exists"),
-    INVALID_FORMAT("invalid format");
+    INVALID_FORMAT("invalid format"),
+    NEGATIVE_PART_COUNT("not enough parts in the warehouse");
 
     private final String message;
 

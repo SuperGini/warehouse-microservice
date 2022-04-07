@@ -1,4 +1,4 @@
 package com.gini.controller.response.base;
 
-public interface ErrorResponse {
+public interface Error {
 }

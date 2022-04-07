@@ -1,23 +1,24 @@
 package com.gini.controller.request;
 
+import com.gini.domain.entities.Suplayer;
 import com.gini.validations.annotation.ValidPartCount;
-
 import lombok.Data;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class PartRequest {
+public class UpdatePartRequest {
+
+    private String partId;
 
     @NotNull
     private String partName;
 
     @NotNull
-
     private String partNumber;
 
-   // @NotNull(message = "part count must not be null")
+    // @NotNull(message = "part count must not be null")
     @ValidPartCount
     private String partCount;
 
@@ -28,7 +29,7 @@ public class PartRequest {
     private CarModelRequest carModel;
 
     @NotNull
-    private String suplayerName;
-    private String manufacturer;
+    private SuplayerRequest suplayer;
+
 
 }
