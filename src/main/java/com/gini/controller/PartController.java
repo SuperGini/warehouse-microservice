@@ -5,6 +5,7 @@ import com.gini.controller.request.UpdatePartRequest;
 import com.gini.controller.response.CreatePartResponse;
 import com.gini.controller.response.ListPartsResponse;
 import com.gini.controller.response.UpdatePartResponse;
+import com.gini.controller.response.base.FindPartResponse;
 import com.gini.services.PartService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,17 +53,18 @@ public record PartController(
     }
 
     @PutMapping("/parts")
-    public ResponseEntity<UpdatePartResponse> updatePart(@RequestBody UpdatePartRequest partRequest) {
+    public ResponseEntity<Integer> updatePart(@RequestBody UpdatePartRequest partRequest) {
 
-        partService.addParts(partRequest);
+        Integer ok = partService.addParts(partRequest);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(ok);
     }
 
-    @PutMapping("/xxx/{one}/{two}")
-    public String update (@PathVariable String one, @PathVariable String two){
-        partService.updatePart(one, two);
-
-        return "bau";
+    @GetMapping("/parts/part/{partNumber}")
+    public ResponseEntity<FindPartResponse> findPartByPartNumber(@PathVariable String partNumber){
+        return ResponseEntity
+                            .ok()
+                                .body(partService.findPartByPartNumber(partNumber));
     }
+
 }

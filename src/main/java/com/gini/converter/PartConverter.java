@@ -4,7 +4,9 @@ import com.gini.controller.request.CreatePartRequest;
 import com.gini.controller.response.CreatePartResponse;
 import com.gini.controller.response.ListPartsResponse;
 import com.gini.controller.response.PriceResponse;
+import com.gini.controller.response.base.FindPartResponse;
 import com.gini.domain.dto.PartDto;
+import com.gini.domain.dto.PartDto2;
 import com.gini.domain.entities.*;
 import com.gini.domain.enums.Constructor;
 import com.gini.domain.enums.Manufacturer;
@@ -83,6 +85,20 @@ public class PartConverter {
                 .manufacturer(part.manufacturer().getManufacturer())
                 .build();
     }
+
+    public FindPartResponse convertToFindPartResponse(PartDto2 partDto2){
+
+        return FindPartResponse.builder()
+                .id(partDto2.id())
+                .partName(partDto2.partName())
+                .partCount(partDto2.partCount())
+                .partNumber(partDto2.partNumber())
+                .price(partDto2.price())
+                .currency(partDto2.currency())
+                .manufacturer(partDto2.manufacturer())
+                .build();
+    }
+
 
     private Count getCount(CreatePartRequest request) {
         Count partCount = new Count();

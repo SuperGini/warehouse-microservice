@@ -1,6 +1,7 @@
 package com.gini.repositories;
 
 import com.gini.domain.dto.PartDto;
+import com.gini.domain.dto.PartDto2;
 import com.gini.domain.dto.PartNumberDto;
 import com.gini.domain.entities.Part;
 import org.springframework.data.domain.Pageable;
@@ -38,15 +39,34 @@ public interface PartRepository extends JpaRepository<Part, UUID> {
     @Query("SELECT COUNT (p.id) FROM Part p")
     int contPartNumber();
 
-    @Query("SELECT part FROM Part part JOIN part.price AS price JOIN part.suplayers AS suplayer JOIN suplayer.count AS countx ON countx.part = part.suplayerPartCount WHERE part.id = :partId AND suplayer.id = :suplayerId")
 
-   // @Query(value = "SELECT * FROM part p WHERE p.id = :partId",
-         //   " JOIN suplayer_parts sp ON pt.id = sp.parts_id" +
-         //   " JOIN suplayer suplayerx ON sp.suplayers_id = suplayerx.id" +
-         //   " JOIN part_count pc ON pc.part_id = pt.id AND pc.suplayer_id = suplayerx.id" +
-         //   " WHERE pt.id = :partId AND suplayerx.id = :suplayerId",
-   //         nativeQuery = true)
+    // @Query(value = "SELECT * FROM part p WHERE p.id = :partId",
+    //   " JOIN suplayer_parts sp ON pt.id = sp.parts_id" +
+    //   " JOIN suplayer suplayerx ON sp.suplayers_id = suplayerx.id" +
+    //   " JOIN part_count pc ON pc.part_id = pt.id AND pc.suplayer_id = suplayerx.id" +
+    //   " WHERE pt.id = :partId AND suplayerx.id = :suplayerId",
+    //         nativeQuery = true)
+
+    @Query("SELECT part FROM Part part " +
+                " JOIN part.price AS price" +
+                " JOIN part.suplayers AS suplayer" +
+                " JOIN suplayer.count AS countx ON countx.part = part.suplayerPartCount" +
+            " WHERE part.id = :partId AND suplayer.id = :suplayerId")
     Optional<Part> findPartToUpdate(@Param("partId") UUID partId, @Param("suplayerId") UUID suplayerId);
+
+
+    @Query("SELECT new com.gini.domain.dto.PartDto2(" +
+                " p.id," +
+                " p.partName," +
+                " p.partCount," +
+                " p.partNumber," +
+                " price.price," +
+                " price.currency," +
+                " p.manufacturer)" +
+            " FROM Part p" +
+            " JOIN p.price AS price" +
+            " WHERE p.partNumber = :partNumber")
+    Optional<PartDto2> findPartByPartNumber(String partNumber);
 
 
 

@@ -5,6 +5,7 @@ import com.gini.controller.response.base.ErrorCode;
 import com.gini.controller.response.base.RestErrorResponse;
 import com.gini.error.handler.errors.ErrorResponse;
 import com.gini.error.handler.exceptions.PartAlreadyExists;
+import com.gini.error.handler.exceptions.PartNotFoundException;
 import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -56,6 +57,16 @@ public class CustomErrorHandler extends ResponseEntityExceptionHandler {
         log.error("Duplicate part found in database: ", ex);
 
         RestErrorResponse<String> restResponse = createErrorResponseBody(ErrorCode.DUPLICATE_PART_FOUND);
+
+        return ResponseEntity.badRequest().body(restResponse);
+    }
+
+
+    @ExceptionHandler(PartNotFoundException.class)
+    public ResponseEntity<Object> handlePartNotFoundException(PartNotFoundException ex){
+        log.error("Part not found in database: ", ex);
+
+        RestErrorResponse<String> restResponse = createErrorResponseBody(ErrorCode.PART_NOT_FOUND);
 
         return ResponseEntity.badRequest().body(restResponse);
     }

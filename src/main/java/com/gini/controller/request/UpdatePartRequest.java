@@ -1,6 +1,5 @@
 package com.gini.controller.request;
 
-import com.gini.domain.entities.Suplayer;
 import com.gini.validations.annotation.ValidPartCount;
 import lombok.Data;
 

@@ -4,9 +4,12 @@ import com.gini.controller.request.CreatePartRequest;
 import com.gini.controller.request.UpdatePartRequest;
 import com.gini.controller.response.CreatePartResponse;
 import com.gini.controller.response.ListPartsResponse;
+import com.gini.controller.response.base.FindPartResponse;
 import com.gini.converter.PartConverter;
+import com.gini.domain.dto.PartDto2;
 import com.gini.domain.entities.Part;
 import com.gini.error.handler.exceptions.PartAlreadyExists;
+import com.gini.error.handler.exceptions.PartNotFoundException;
 import com.gini.repositories.PartRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -24,7 +26,6 @@ import java.util.UUID;
 public class PartServiceImpl implements PartService {
 
     private static final int ITEMS_ON_PAGE = 5;
-
     private final PartRepository partRepository;
 
 
@@ -56,6 +57,7 @@ public class PartServiceImpl implements PartService {
                 .toList();
     }
 
+
     @Override
     @Transactional
     public Integer findPartsCount() {
@@ -69,6 +71,7 @@ public class PartServiceImpl implements PartService {
                 });
     }
 
+
     @Override
     @Transactional
     public int addParts(UpdatePartRequest partRequest) {
@@ -76,42 +79,41 @@ public class PartServiceImpl implements PartService {
         UUID partId = UUID.fromString(partRequest.getPartId());
         UUID suplayerId = UUID.fromString(partRequest.getSuplayer().getSuplayerId());
 
-        Optional<Part> part = partRepository.findPartToUpdate(partId, suplayerId);
+        Part part = partRepository.findPartToUpdate(partId, suplayerId)
+                                    .orElseThrow(
+                                            () -> new RuntimeException("part not found"));
 
+        Integer partCount = updatePartCount(partRequest, part);
+        BigInteger suplayerCount = updateSuplayerPartCount(partRequest, part);
 
-        if (part.isPresent()) {
+        part.setPartCount(partCount);
+        part.getSuplayerPartCount().setSuplayerPartCount(suplayerCount);
 
-            Part updatePart = part.get();
+        partRepository.save(part);
 
-            Integer partCount = updatePart.getPartCount() + Integer.parseInt(partRequest.getPartCount());
-
-            BigInteger suplayerCount = updatePart.getSuplayerPartCount().getSuplayerPartCount()
-                                                        .add(
-                                                            new BigInteger(partRequest.getPartCount()));
-
-            updatePart.setPartCount(partCount);
-            updatePart.getSuplayerPartCount().setSuplayerPartCount(suplayerCount);
-
-
-            partRepository.save(updatePart);
-
-
-        }
-
-        return 0;
-
+        return 0; //because I was bored:D -> I should have returned the new updated part
     }
+
 
     @Override
     @Transactional
-    public void updatePart(String partId, String suplayerId) {
+    public FindPartResponse findPartByPartNumber(String partNumber) {
 
-//        UUID one = UUID.fromString(partId);
-//
-//        UUID two = UUID.fromString(suplayerId);
-//
-//        Part partx =partRepository.findPartToUpdate(one, two);
+        PartDto2 part = partRepository.findPartByPartNumber(partNumber)
+                .orElseThrow(() -> new PartNotFoundException("Part not found."));
 
-        System.out.println("xxxx");
+        return PartConverter.convertToFindPartResponse(part);
+
+    }
+
+
+    private BigInteger updateSuplayerPartCount(UpdatePartRequest partRequest, Part part) {
+        return part.getSuplayerPartCount().getSuplayerPartCount()
+                .add(
+                        new BigInteger(partRequest.getPartCount()));
+    }
+
+    private int updatePartCount(UpdatePartRequest partRequest, Part part) {
+        return part.getPartCount() + Integer.parseInt(partRequest.getPartCount());
     }
 }

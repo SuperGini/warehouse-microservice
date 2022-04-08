@@ -4,6 +4,7 @@ import com.gini.controller.request.CreatePartRequest;
 import com.gini.controller.request.UpdatePartRequest;
 import com.gini.controller.response.CreatePartResponse;
 import com.gini.controller.response.ListPartsResponse;
+import com.gini.controller.response.base.FindPartResponse;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -22,5 +23,5 @@ public interface PartService {
     int addParts(UpdatePartRequest updatePart);
 
     @Transactional
-    void updatePart(String partId, String suplayerId);
+    FindPartResponse findPartByPartNumber(String partNumber);
 }

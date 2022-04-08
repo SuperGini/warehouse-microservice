@@ -79,10 +79,10 @@ public class Part {
     @ManyToMany(mappedBy = "parts", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<CarModel> carModels = new ArrayList<>();
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     private PartSpecification partSpecifications;
 
-    @OneToMany(mappedBy = "part", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "part", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Set<Comment> comments = new HashSet<>();
 
     @Enumerated(EnumType.STRING)

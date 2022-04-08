@@ -7,6 +7,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
@@ -45,7 +46,7 @@ public class Price {
     @Column(name = "vat")
     private BigDecimal vat;
 
-    @OneToOne(mappedBy = "price")
+    @OneToOne(mappedBy = "price", fetch = FetchType.LAZY)
     private Part part;
 
     @Override
