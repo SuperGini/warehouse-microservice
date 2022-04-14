@@ -26,46 +26,45 @@ public interface PartRepository extends JpaRepository<Part, UUID> {
     //https://vladmihalcea.com/the-best-way-to-map-a-projection-query-to-a-dto-with-jpa-and-hibernate/
     //https://www.baeldung.com/spring-data-jpa-pagination-sorting
     //https://www.petrikainulainen.net/programming/spring-framework/spring-data-jpa-tutorial-part-seven-pagination/
-    @Query("SELECT" +
-            " new com.gini.domain.dto.PartDto(" +
-                " part.id, part.partName, part.partCount, part.partNumber, price.price, price.currency," +
-                " price.discount, price.vat, specs.specifications, part.manufacturer)" +
-            " FROM Part part" +
-                " JOIN part.price AS price" +
-                " LEFT JOIN part.partSpecifications AS specs" +
-            " ORDER BY part.updated ASC")
+    @Query("""
+        
+        SELECT
+        new com.gini.domain.dto.PartDto( 
+                 part.id, part.partName, part.partCount, part.partNumber, price.price, price.currency,
+                 price.discount, price.vat, specs.specifications, part.manufacturer)
+        FROM Part part
+                 JOIN part.price AS price
+                 LEFT JOIN part.partSpecifications AS specs
+        ORDER BY part.updated ASC
+        """)
     List<PartDto> findAllPartsWithPagination(Pageable pageable);
 
     @Query("SELECT COUNT (p.id) FROM Part p")
     int contPartNumber();
 
 
-    // @Query(value = "SELECT * FROM part p WHERE p.id = :partId",
-    //   " JOIN suplayer_parts sp ON pt.id = sp.parts_id" +
-    //   " JOIN suplayer suplayerx ON sp.suplayers_id = suplayerx.id" +
-    //   " JOIN part_count pc ON pc.part_id = pt.id AND pc.suplayer_id = suplayerx.id" +
-    //   " WHERE pt.id = :partId AND suplayerx.id = :suplayerId",
-    //         nativeQuery = true)
-
-    @Query("SELECT part FROM Part part " +
-                " JOIN part.price AS price" +
-                " JOIN part.suplayers AS suplayer" +
-                " JOIN suplayer.count AS countx ON countx.part = part.suplayerPartCount" +
-            " WHERE part.id = :partId AND suplayer.id = :suplayerId")
+    @Query(""" 
+            SELECT part FROM Part part
+                JOIN part.price AS price
+                JOIN part.suplayers AS suplayer
+                JOIN suplayer.count AS countx ON countx.part = part.suplayerPartCount
+            WHERE part.id = :partId AND suplayer.id = :suplayerId
+            """)
     Optional<Part> findPartToUpdate(@Param("partId") UUID partId, @Param("suplayerId") UUID suplayerId);
 
-
-    @Query("SELECT new com.gini.domain.dto.PartDto2(" +
-                " p.id," +
-                " p.partName," +
-                " p.partCount," +
-                " p.partNumber," +
-                " price.price," +
-                " price.currency," +
-                " p.manufacturer)" +
-            " FROM Part p" +
-            " JOIN p.price AS price" +
-            " WHERE p.partNumber = :partNumber")
+    @Query("""
+            SELECT new com.gini.domain.dto.PartDto2(
+                p.id,
+                p.partName,
+                p.partCount,
+                p.partNumber,
+                price.price,
+                price.currency,
+                p.manufacturer)
+            FROM Part p 
+            JOIN p.price AS price
+            WHERE p.partNumber = :partNumber
+            """)
     Optional<PartDto2> findPartByPartNumber(String partNumber);
 
 
