@@ -69,10 +69,9 @@ public record PartController(
 
     @PutMapping("/parts/part/{partNumber}/{partPrice}")
     public ResponseEntity<FindPartResponse> updatePartPrice(@PathVariable String partNumber, @PathVariable String partPrice){
-
-
-        return new ResponseEntity<>(partService.updatePartPrice(partNumber, partPrice), HttpStatus.OK);
-
+        return ResponseEntity
+                            .ok()
+                                .body(partService.updatePartPrice(partNumber, partPrice));
     }
 
 }

@@ -30,10 +30,8 @@ public class KafkaConfig {
     public NewTopic test3(){
         return TopicBuilder
                 .name("topic_replay.warehouse")
-                .partitions(2)
+                .partitions(1)
                 .replicas(1)
                 .build();
     }
-
-
 }
