@@ -7,7 +7,11 @@ import com.gini.controller.response.PriceResponse;
 import com.gini.controller.response.base.FindPartResponse;
 import com.gini.domain.dto.PartDto;
 import com.gini.domain.dto.PartDto2;
-import com.gini.domain.entities.*;
+import com.gini.domain.entities.CarModel;
+import com.gini.domain.entities.Count;
+import com.gini.domain.entities.Part;
+import com.gini.domain.entities.Price;
+import com.gini.domain.entities.Suplayer;
 import com.gini.domain.enums.Constructor;
 import com.gini.domain.enums.Manufacturer;
 import lombok.experimental.UtilityClass;
@@ -17,7 +21,6 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Set;
 
 @UtilityClass
 public class PartConverter {
@@ -48,7 +51,7 @@ public class PartConverter {
         return part;
     }
 
-    public CreatePartResponse convertToListPartResponse(Part part){
+    public CreatePartResponse convertToListPartResponse(Part part) {
 
         PriceResponse priceResponse = PriceResponse.builder()
                 .price(part.getPrice().getPrice())
@@ -57,7 +60,7 @@ public class PartConverter {
                 .vat(part.getPrice().getVat())
                 .build();
 
-       return  CreatePartResponse.builder()
+        return CreatePartResponse.builder()
                 .id(part.getId())
                 .partName(part.getPartName())
                 .partCount(part.getPartCount())
@@ -67,7 +70,7 @@ public class PartConverter {
                 .build();
     }
 
-    public ListPartsResponse convertToListPartResponse(PartDto part){
+    public ListPartsResponse convertToListPartResponse(PartDto part) {
 
         PriceResponse priceResponse = PriceResponse.builder()
                 .price(part.price())
@@ -76,7 +79,7 @@ public class PartConverter {
                 .vat(part.vat())
                 .build();
 
-       return  ListPartsResponse.builder()
+        return ListPartsResponse.builder()
                 .id(part.id())
                 .partName(part.partName())
                 .partCount(BigInteger.valueOf(part.partCount()))
@@ -86,7 +89,7 @@ public class PartConverter {
                 .build();
     }
 
-    public FindPartResponse convertToFindPartResponse(PartDto2 partDto2){
+    public FindPartResponse convertToFindPartResponse(PartDto2 partDto2) {
 
         return FindPartResponse.builder()
                 .id(partDto2.id())
@@ -96,6 +99,19 @@ public class PartConverter {
                 .price(partDto2.price())
                 .currency(partDto2.currency())
                 .manufacturer(partDto2.manufacturer())
+                .build();
+    }
+
+    public FindPartResponse convertToFindPartResponse(Part part) {
+
+        return FindPartResponse.builder()
+                .id(part.getId())
+                .partName(part.getPartName())
+                .partCount(part.getPartCount())
+                .partNumber(part.getPartNumber())
+                .price(part.getPrice().getPrice())
+                .currency(part.getPrice().getCurrency())
+                .manufacturer(part.getManufacturer())
                 .build();
     }
 

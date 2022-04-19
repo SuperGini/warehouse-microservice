@@ -24,4 +24,7 @@ public interface PartService {
 
     @Transactional
     FindPartResponse findPartByPartNumber(String partNumber);
+
+    @Transactional
+    FindPartResponse updatePartPrice(String partNumber, String partPrice);
 }

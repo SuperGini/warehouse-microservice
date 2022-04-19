@@ -5,11 +5,13 @@ import com.gini.controller.request.UpdatePartRequest;
 import com.gini.controller.response.CreatePartResponse;
 import com.gini.controller.response.ListPartsResponse;
 import com.gini.controller.response.base.FindPartResponse;
+import com.gini.converter.AvroConvertor;
 import com.gini.converter.PartConverter;
 import com.gini.domain.dto.PartDto2;
 import com.gini.domain.entities.Part;
 import com.gini.error.handler.exceptions.PartAlreadyExists;
 import com.gini.error.handler.exceptions.PartNotFoundException;
+import com.gini.kafka.producer.UpdatePriceProducer;
 import com.gini.repositories.PartRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
@@ -27,6 +30,7 @@ public class PartServiceImpl implements PartService {
 
     private static final int ITEMS_ON_PAGE = 5;
     private final PartRepository partRepository;
+    private final UpdatePriceProducer updatePriceProducer;
 
 
     @Override
@@ -80,8 +84,8 @@ public class PartServiceImpl implements PartService {
         UUID suplayerId = UUID.fromString(partRequest.getSuplayer().getSuplayerId());
 
         Part part = partRepository.findPartToUpdate(partId, suplayerId)
-                                    .orElseThrow(
-                                            () -> new RuntimeException("part not found"));
+                .orElseThrow(
+                        () -> new RuntimeException("part not found"));
 
         Integer partCount = updatePartCount(partRequest, part);
         BigInteger suplayerCount = updateSuplayerPartCount(partRequest, part);
@@ -99,11 +103,34 @@ public class PartServiceImpl implements PartService {
     @Transactional
     public FindPartResponse findPartByPartNumber(String partNumber) {
 
-        PartDto2 part = partRepository.findPartByPartNumber(partNumber)
+        PartDto2 part = partRepository.findPartByPartNumberVersion2(partNumber)
                 .orElseThrow(() -> new PartNotFoundException("Part not found."));
 
         return PartConverter.convertToFindPartResponse(part);
 
+    }
+
+    @Override
+    @Transactional
+    public FindPartResponse updatePartPrice(String partNumber, String partPrice) {
+
+        var part = findPartBy(partNumber);
+        setNewPriceOnPart(partPrice, part);
+
+        var updatedPart = partRepository.save(part);
+        var partPriceUpdate = AvroConvertor.convertToKafkaMessage(part);
+        updatePriceProducer.sendMessageToKafka(partPriceUpdate);
+
+        return PartConverter.convertToFindPartResponse(updatedPart);
+    }
+
+    private void setNewPriceOnPart(String partPrice, Part part) {
+        part.getPrice().setPrice(new BigDecimal(partPrice));
+    }
+
+    private Part findPartBy(String partNumber) {
+        return partRepository.findPartByPartNumber(partNumber)
+                .orElseThrow(() -> new PartNotFoundException("part was not found"));
     }
 
 

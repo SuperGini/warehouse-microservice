@@ -6,6 +6,7 @@ import com.gini.controller.response.base.RestErrorResponse;
 import com.gini.error.handler.errors.ErrorResponse;
 import com.gini.error.handler.exceptions.PartAlreadyExists;
 import com.gini.error.handler.exceptions.PartNotFoundException;
+import com.gini.error.handler.exceptions.PartPriceNotUpdated;
 import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -85,6 +86,14 @@ public class CustomErrorHandler extends ResponseEntityExceptionHandler {
         log.error("The number of parts can not be below zero. ", ex);
 
         RestErrorResponse<String> restErrorResponse = createErrorResponseBody(ErrorCode.NEGATIVE_PART_COUNT);
+
+        return ResponseEntity.badRequest().body(restErrorResponse);
+    }
+    @ExceptionHandler(PartPriceNotUpdated.class)
+    public ResponseEntity<Error> handlePartPRiceNotUpdated(PartPriceNotUpdated ex){
+        log.error("Part price was not updated. ", ex);
+
+        RestErrorResponse<String> restErrorResponse = createErrorResponseBody(ErrorCode.PART_PRICE_NOT_UPDATED);
 
         return ResponseEntity.badRequest().body(restErrorResponse);
     }

@@ -6,11 +6,13 @@ import com.gini.domain.dto.PartNumberDto;
 import com.gini.domain.entities.Part;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -65,7 +67,26 @@ public interface PartRepository extends JpaRepository<Part, UUID> {
             JOIN p.price AS price
             WHERE p.partNumber = :partNumber
             """)
-    Optional<PartDto2> findPartByPartNumber(String partNumber);
+    Optional<PartDto2> findPartByPartNumberVersion2(@Param("partNumber") String partNumber);
+
+    //mai intai facem flush la toate entitatile in baza de date dupa care facem clear la persistance context
+    //daca am face mai intai clear la persistance contex e posibil sa avem enitati modificate in persitance context
+    //care nu apuca sa aduca modificarile in baza de date
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query(value = """
+        UPDATE part p JOIN price pr ON p.price_id = pr.id
+                                     SET pr.price =:price WHERE p.part_number =:partNumber
+        """,
+            nativeQuery = true
+    )
+    int updatePrice(@Param("partNumber") String partNumber, @Param("price") BigDecimal price);
+
+
+    Optional<Part> findPartByPartNumber(String partNumber);
+
+
+
+
 
 
 

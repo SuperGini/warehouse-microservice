@@ -58,7 +58,7 @@ public class Part {
     @Column(name = "part_count", nullable = false)
     private Integer partCount;
 
-    @OneToOne(mappedBy = "part", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToOne(mappedBy = "part", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private Count suplayerPartCount;
 
     @Column(name = "part_number", nullable = false, unique = true, updatable = false)
