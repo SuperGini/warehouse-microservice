@@ -1,9 +1,14 @@
+
 package com.gini.error.handler;
 
+import com.gini.controller.response.base.Error;
 import com.gini.controller.response.base.ErrorCode;
 import com.gini.controller.response.base.RestErrorResponse;
 import com.gini.error.handler.errors.ErrorResponse;
 import com.gini.error.handler.exceptions.PartAlreadyExists;
+import com.gini.error.handler.exceptions.PartNotFoundException;
+import com.gini.error.handler.exceptions.PartPriceNotUpdated;
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -48,22 +53,66 @@ public class CustomErrorHandler extends ResponseEntityExceptionHandler {
         return restResponse;
     }
 
-    private void addErrorToErrorsList(List<ErrorResponse> errors, FieldError x) {
-        String field = x.getField();
-        String message = x.getDefaultMessage();
-        ErrorResponse errorResponse = new ErrorResponse(field, message);
-        errors.add(errorResponse);
-    }
 
     @ExceptionHandler(PartAlreadyExists.class)
     public ResponseEntity<Object> handlePartAlreadyExistsException(PartAlreadyExists ex) {
         log.error("Duplicate part found in database: ", ex);
 
-        RestErrorResponse<String> restResponse = new RestErrorResponse<>();
-        restResponse.setErrorCode(ErrorCode.DUPLICATE_PART_FOUND);
-        restResponse.setErrorMessage(ErrorCode.DUPLICATE_PART_FOUND.getMessage());
+        RestErrorResponse<String> restResponse = createErrorResponseBody(ErrorCode.DUPLICATE_PART_FOUND);
 
         return ResponseEntity.badRequest().body(restResponse);
+    }
+
+
+    @ExceptionHandler(PartNotFoundException.class)
+    public ResponseEntity<Object> handlePartNotFoundException(PartNotFoundException ex) {
+        log.error("Part not found in database: ", ex);
+
+        RestErrorResponse<String> restResponse = createErrorResponseBody(ErrorCode.PART_NOT_FOUND);
+
+        return ResponseEntity.badRequest().body(restResponse);
+    }
+
+    @ExceptionHandler(NumberFormatException.class)
+    public ResponseEntity<Error> handleNumberFormatException(NumberFormatException ex) {
+        log.error("The format {} is wrong. Accepting only numbers: ", ex.getMessage().toLowerCase(), ex);
+
+        RestErrorResponse<String> restErrorResponse = createErrorResponseBody(ErrorCode.INVALID_FORMAT);
+
+        return ResponseEntity.badRequest().body(restErrorResponse);
+    }
+
+    @ExceptionHandler(MysqlDataTruncation.class)
+    public ResponseEntity<Error> handleMysqlDataTruncation(MysqlDataTruncation ex) {
+        log.error("The number of parts can not be below zero. ", ex);
+
+        RestErrorResponse<String> restErrorResponse = createErrorResponseBody(ErrorCode.NEGATIVE_PART_COUNT);
+
+        return ResponseEntity.badRequest().body(restErrorResponse);
+    }
+
+    @ExceptionHandler(PartPriceNotUpdated.class)
+    public ResponseEntity<Error> handlePartPRiceNotUpdated(PartPriceNotUpdated ex) {
+        log.error("Part price was not updated. ", ex);
+
+        RestErrorResponse<String> restErrorResponse = createErrorResponseBody(ErrorCode.PART_PRICE_NOT_UPDATED);
+
+        return ResponseEntity.badRequest().body(restErrorResponse);
+    }
+
+
+    private RestErrorResponse<String> createErrorResponseBody(ErrorCode errorCode) {
+        RestErrorResponse<String> restResponse = new RestErrorResponse<>();
+        restResponse.setErrorCode(errorCode);
+        restResponse.setErrorMessage(errorCode.getMessage());
+        return restResponse;
+    }
+
+    private void addErrorToErrorsList(List<ErrorResponse> errors, FieldError x) {
+        String field = x.getField();
+        String message = x.getDefaultMessage();
+        ErrorResponse errorResponse = new ErrorResponse(field, message);
+        errors.add(errorResponse);
     }
 
 

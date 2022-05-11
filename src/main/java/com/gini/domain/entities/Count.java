@@ -31,10 +31,10 @@ public class Count {
     @Column(name = "suplayer_Part_Count")
     private BigInteger suplayerPartCount;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private Part part;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Suplayer suplayer;
 
 

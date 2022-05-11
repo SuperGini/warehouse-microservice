@@ -1,11 +1,17 @@
 package com.gini.converter;
 
-import com.gini.controller.request.PartRequest;
+import com.gini.controller.request.CreatePartRequest;
 import com.gini.controller.response.CreatePartResponse;
 import com.gini.controller.response.ListPartsResponse;
 import com.gini.controller.response.PriceResponse;
+import com.gini.controller.response.base.FindPartResponse;
 import com.gini.domain.dto.PartDto;
-import com.gini.domain.entities.*;
+import com.gini.domain.dto.PartDto2;
+import com.gini.domain.entities.CarModel;
+import com.gini.domain.entities.Count;
+import com.gini.domain.entities.Part;
+import com.gini.domain.entities.Price;
+import com.gini.domain.entities.Suplayer;
 import com.gini.domain.enums.Constructor;
 import com.gini.domain.enums.Manufacturer;
 import lombok.experimental.UtilityClass;
@@ -15,12 +21,11 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Set;
 
 @UtilityClass
 public class PartConverter {
 
-    public Part convert(PartRequest request) {
+    public Part convert(CreatePartRequest request) {
 
         Price price = getPrice(request);
         Count partCount = getCount(request);
@@ -29,10 +34,10 @@ public class PartConverter {
 
         Part part = Part.builder()
                 .manufacturer(Manufacturer.valueOf(request.getManufacturer()))
-                .partCount(new BigInteger(request.getPartCount()))
+                .partCount(Integer.parseInt(request.getPartCount()))
                 .partNumber(request.getPartNumber())
                 .partName(request.getPartName())
-                .carModels(Set.of(carModel))
+                .carModels(List.of(carModel))
                 .suplayers(List.of(suplayer))
                 .suplayerPartCount(partCount)
                 .price(price)
@@ -40,12 +45,13 @@ public class PartConverter {
 
         partCount.setPart(part);
         partCount.setSuplayer(suplayer);
-        carModel.setParts(Set.of(part));
+        carModel.setParts(List.of(part));
+        suplayer.setParts(List.of(part));
 
         return part;
     }
 
-    public CreatePartResponse convertToListPartResponse(Part part){
+    public CreatePartResponse convertToListPartResponse(Part part) {
 
         PriceResponse priceResponse = PriceResponse.builder()
                 .price(part.getPrice().getPrice())
@@ -54,7 +60,7 @@ public class PartConverter {
                 .vat(part.getPrice().getVat())
                 .build();
 
-       return  CreatePartResponse.builder()
+        return CreatePartResponse.builder()
                 .id(part.getId())
                 .partName(part.getPartName())
                 .partCount(part.getPartCount())
@@ -64,7 +70,7 @@ public class PartConverter {
                 .build();
     }
 
-    public ListPartsResponse convertToListPartResponse(PartDto part){
+    public ListPartsResponse convertToListPartResponse(PartDto part) {
 
         PriceResponse priceResponse = PriceResponse.builder()
                 .price(part.price())
@@ -73,23 +79,50 @@ public class PartConverter {
                 .vat(part.vat())
                 .build();
 
-       return  ListPartsResponse.builder()
+        return ListPartsResponse.builder()
                 .id(part.id())
                 .partName(part.partName())
-                .partCount(part.partCount())
+                .partCount(BigInteger.valueOf(part.partCount()))
                 .partNumber(part.partNumber())
                 .price(priceResponse)
                 .manufacturer(part.manufacturer().getManufacturer())
                 .build();
     }
 
-    private Count getCount(PartRequest request) {
+    public FindPartResponse convertToFindPartResponse(PartDto2 partDto2) {
+
+        return FindPartResponse.builder()
+                .id(partDto2.id())
+                .partName(partDto2.partName())
+                .partCount(partDto2.partCount())
+                .partNumber(partDto2.partNumber())
+                .price(partDto2.price())
+                .currency(partDto2.currency())
+                .manufacturer(partDto2.manufacturer())
+                .build();
+    }
+
+    public FindPartResponse convertToFindPartResponse(Part part) {
+
+        return FindPartResponse.builder()
+                .id(part.getId())
+                .partName(part.getPartName())
+                .partCount(part.getPartCount())
+                .partNumber(part.getPartNumber())
+                .price(part.getPrice().getPrice())
+                .currency(part.getPrice().getCurrency())
+                .manufacturer(part.getManufacturer())
+                .build();
+    }
+
+
+    private Count getCount(CreatePartRequest request) {
         Count partCount = new Count();
         partCount.setSuplayerPartCount(new BigInteger(request.getPartCount()));
         return partCount;
     }
 
-    private CarModel getCarModel(PartRequest request) {
+    private CarModel getCarModel(CreatePartRequest request) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
         return CarModel.builder()
@@ -100,14 +133,14 @@ public class PartConverter {
                 .build();
     }
 
-    private Suplayer getSuplayer(PartRequest request, Count partCount) {
+    private Suplayer getSuplayer(CreatePartRequest request, Count partCount) {
         Suplayer suplayer = new Suplayer();
         suplayer.setName(request.getSuplayerName());
         suplayer.setCount(List.of(partCount));
         return suplayer;
     }
 
-    private Price getPrice(PartRequest request) {
+    private Price getPrice(CreatePartRequest request) {
         Price price = new Price();
         price.setCurrency(request.getPartPrice().getCurrency());
         price.setPrice(new BigDecimal(request.getPartPrice().getPrice()));

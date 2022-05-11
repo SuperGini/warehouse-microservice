@@ -8,7 +8,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class PartRequest {
+public class CreatePartRequest {
 
     @NotNull
     private String partName;

@@ -1,5 +1,8 @@
 package com.gini.validations.validators;
 
+
+
+
 import com.gini.validations.annotation.ValidPartCount;
 
 import javax.validation.ConstraintValidator;
@@ -12,22 +15,22 @@ public class PartCountValidation implements ConstraintValidator<ValidPartCount, 
     public boolean isValid(String partCount, ConstraintValidatorContext context) {
 
         BigDecimal count;
-        try{
-             count = new BigDecimal(partCount);
-        }catch (NumberFormatException e){
+        try {
+            count = new BigDecimal(partCount);
+        } catch (NumberFormatException e) {
             setValidationErrorMessage(context, "wrong format");
             return false;
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             setValidationErrorMessage(context, "must not be null");
             return false;
         }
 
-        if(isNegativeOrZero(count)){
+        if (isNegativeOrZero(count)) {
             setValidationErrorMessage(context, "must be a number greater than zero");
             return false;
         }
 
-        if(isWithDecimals(count)){
+        if (isWithDecimals(count)) {
             setValidationErrorMessage(context, "must not have decimals");
             return false;
         }
@@ -47,8 +50,7 @@ public class PartCountValidation implements ConstraintValidator<ValidPartCount, 
 
         context.disableDefaultConstraintViolation();
         context.buildConstraintViolationWithTemplate(validationErrorMessage)
-                    .addConstraintViolation();
-
+                .addConstraintViolation();
 
 
     }
