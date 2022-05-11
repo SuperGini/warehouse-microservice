@@ -98,7 +98,6 @@ public class PartServiceImpl implements PartService {
         return 0; //because I was bored:D -> I should have returned the new updated part
     }
 
-
     @Override
     @Transactional
     public FindPartResponse findPartByPartNumber(String partNumber) {

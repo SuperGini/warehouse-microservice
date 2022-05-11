@@ -1,3 +1,4 @@
+
 package com.gini.error.handler;
 
 import com.gini.controller.response.base.Error;
@@ -64,7 +65,7 @@ public class CustomErrorHandler extends ResponseEntityExceptionHandler {
 
 
     @ExceptionHandler(PartNotFoundException.class)
-    public ResponseEntity<Object> handlePartNotFoundException(PartNotFoundException ex){
+    public ResponseEntity<Object> handlePartNotFoundException(PartNotFoundException ex) {
         log.error("Part not found in database: ", ex);
 
         RestErrorResponse<String> restResponse = createErrorResponseBody(ErrorCode.PART_NOT_FOUND);
@@ -82,15 +83,16 @@ public class CustomErrorHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(MysqlDataTruncation.class)
-    public ResponseEntity<Error> handleMysqlDataTruncation(MysqlDataTruncation ex){
+    public ResponseEntity<Error> handleMysqlDataTruncation(MysqlDataTruncation ex) {
         log.error("The number of parts can not be below zero. ", ex);
 
         RestErrorResponse<String> restErrorResponse = createErrorResponseBody(ErrorCode.NEGATIVE_PART_COUNT);
 
         return ResponseEntity.badRequest().body(restErrorResponse);
     }
+
     @ExceptionHandler(PartPriceNotUpdated.class)
-    public ResponseEntity<Error> handlePartPRiceNotUpdated(PartPriceNotUpdated ex){
+    public ResponseEntity<Error> handlePartPRiceNotUpdated(PartPriceNotUpdated ex) {
         log.error("Part price was not updated. ", ex);
 
         RestErrorResponse<String> restErrorResponse = createErrorResponseBody(ErrorCode.PART_PRICE_NOT_UPDATED);
